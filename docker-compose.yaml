@@ -1,0 +1,30 @@
+version: "1"
+
+volumes:
+    mariadb_volume:
+    
+services:
+    webserver:
+        build: javaWebServer/
+        restart:always
+        environment:
+            - TZ=Europe/Kiev
+            - DB_HOST=mariadb
+            - DB_PORT_NUMBER=3306
+            - DB_USER=chiffa
+            - DB_PASSWORD=123
+            - DB_DATABASE=test_db
+        volumes:
+            - /root/dockerTest/res/:/usr/src/app/ServerTest/res/
+    mariadb:
+        images: mariasql
+        container_name: mariadb-container
+        volumes:
+           - mariadb_volume: /root/dockerTest/DB_data/
+           - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+        restart:always
+        environment:
+            - TZ=Europe/Kiev
+            - MARIADB_USER=chiffa
+            - MARIADB_PASSWORD=123
+            - MARIADB_DATABASE=test_db
